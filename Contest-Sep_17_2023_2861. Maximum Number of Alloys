@@ -1,0 +1,25 @@
+from typing import List
+
+class Solution:
+    def maxNumberOfAlloys(self, n: int, k: int, budget: int, composition: List[List[int]], stock: List[int], cost: List[int]) -> int:
+        def is_affordable(mid, composition, stock, cost):
+            # Calc the total cost to make a 'mid' number of alloys using the current composition
+            total_cost = sum(max(0, composition[i] * mid - stock[i]) * cost[i] for i in range(n))
+            return total_cost <= budget
+
+        max_alloys = 0 #reset max_alloys for current machine i
+
+        for i in range(k):
+            # Calc max_alloys that can be created by this machine i
+            max_potential_alloys = min(budget // cost[j] + stock[j] // composition[i][j] for j in range(n))
+            # Apply binary search to find max_alloys produced by machine i, within 'budget'
+            left, right = 0, max_potential_alloys
+            while left <= right:
+                mid = (left + right) // 2
+                if is_affordable(mid, composition[i], stock, cost):
+                    max_alloys = max(max_alloys, mid)
+                    left = mid + 1
+                else:
+                    right = mid - 1
+
+        return max_alloys
