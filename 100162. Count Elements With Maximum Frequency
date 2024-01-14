@@ -1,0 +1,15 @@
+class Solution:
+    def maxFrequencyElements(self, nums: List[int]) -> int:
+        # Step 1: Count the frequency of each element
+        frequency = {}
+        for num in nums:
+            if num in frequency:
+                frequency[num] += 1
+            else:
+                frequency[num] = 1
+
+        # Step 2: Find the maximum frequency
+        max_freq = max(frequency.values())
+
+        # Step 3: Count how many elements have this maximum frequency and sum their frequencies
+        return sum(freq for freq in frequency.values() if freq == max_freq)
