@@ -1,0 +1,28 @@
+class Solution:
+    def countSetBitsAtMultiplesOfX(self, n, x):
+        # Count set bits at positions that are multiples of x in the range [1, n]
+        count = 0
+        for i in range(x, n.bit_length() + 1, x):
+            # Calculate the total number of complete cycles of length 2^i
+            complete_cycles = (n + 1) // (1 << i)
+            count += complete_cycles * (1 << (i - 1))
+
+            # Add the remaining set bits in the last incomplete cycle
+            remaining = (n + 1) % (1 << i)
+            if remaining > (1 << (i - 1)):
+                count += remaining - (1 << (i - 1))
+        return count
+
+    def findMaximumNumber(self, k: int, x: int) -> int:
+        left, right = 1, 2
+        while self.countSetBitsAtMultiplesOfX(right, x) <= k:
+            right *= 2
+
+        while left < right:
+            mid = (left + right) // 2
+            if self.countSetBitsAtMultiplesOfX(mid, x) <= k:
+                left = mid + 1
+            else:
+                right = mid
+
+        return left - 1
