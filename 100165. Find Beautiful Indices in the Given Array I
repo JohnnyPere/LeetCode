@@ -1,0 +1,22 @@
+def findBeautifulIndices(s, a, b, k):
+    # Helper function to find all start indices of the substring 'sub' in 's'
+    def findIndices(s, sub):
+        # Iterate through 's' to find matches for 'sub'
+        return [i for i in range(len(s) - len(sub) + 1) if s[i:i + len(sub)] == sub]
+
+    # Step 1: Find indices for 'a' in 's'
+    indices_a = findIndices(s, a)
+    # Step 2: Find indices for 'b' in 's'
+    indices_b = findIndices(s, b)
+
+    beautiful_indices = []
+
+    # Step 3: Iterate through indices of 'a'
+    for index_a in indices_a:
+        # Step 4: Check if there exists a suitable index in 'b' within the distance 'k'
+        if any(abs(index_a - index_b) <= k for index_b in indices_b):
+            # If a suitable index is found, add it to the list of beautiful indices
+            beautiful_indices.append(index_a)
+
+    # Step 5: Return the list of beautiful indices
+    return beautiful_indices
